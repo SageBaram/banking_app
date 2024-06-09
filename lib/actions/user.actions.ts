@@ -17,15 +17,16 @@ export const signIn = async ({ email, password }: signInProps) => {
 export const signUp = async (userData: SignUpParams) => {
   try {
 
+    const { email, password, firstName, lastName } = userData;
     const { account } = await createAdminClient();
 
     const newUserAccount = await account.create(
       ID.unique(),
-      userData.email,
-      userData.password,
-      `${userData.firstName} ${userData.lastName}`
+      email,
+      password,
+      `${firstName} ${lastName}`
     );
-    const session = await account.createEmailPasswordSession(userData.email, userData.password);
+    const session = await account.createEmailPasswordSession(email, password);
 
     cookies().set("appwrite-session", session.secret, {
       path: "/",
